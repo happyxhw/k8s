@@ -1,0 +1,61 @@
+nodes:
+  - internal_address: 192.168.122.201
+    address: 192.168.122.201
+    user: k8s
+    role:
+      - controlplane
+      - etcd
+      - worker
+    ssh_key_path: /home/k8s/.ssh/k8s_rsa
+
+  - internal_address: 192.168.122.202
+    address: 192.168.122.202
+    user: k8s
+    role:
+      - worker
+    ssh_key_path: /home/k8s/.ssh/k8s_rsa
+
+  - internal_address: 192.168.122.203
+    address: 192.168.122.203
+    user: k8s
+    role:
+      - worker
+    ssh_key_path: /home/k8s/.ssh/k8s_rsa
+    labels:
+      app: ingress
+
+# If set to true, RKE will not fail when unsupported Docker version
+# are found
+ignore_docker_version: true
+
+# Cluster level SSH private key
+# Used if no ssh information is set for the node
+
+ssh_agent_auth: false
+
+cluster_name: happyk8s
+
+# kubernetes_version: v1.17.3-rancher1-1
+
+authorization:
+  mode: rbac
+
+# Add-ons are deployed using kubernetes jobs. RKE will give
+# up on trying to get the job status after this timeout in seconds..
+addon_job_timeout: 30
+
+# Specify network plugin-in (canal, calico, flannel, weave, or none)
+network:
+  plugin: canal
+
+# Specify DNS provider (coredns or kube-dns)
+dns:
+  provider: coredns
+
+# Currently only nginx ingress provider is supported.
+# To disable ingress controller, set `provider: none`
+# `node_selector` controls ingress placement and is optional
+ingress:
+  provider: nginx
+  node_selector:
+    app: ingress

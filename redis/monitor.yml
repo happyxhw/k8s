@@ -1,0 +1,35 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: redis-monitor
+  namespace: db
+  labels:
+    k8s-app: redis-monitor
+    monitoring: redis-monitor
+spec:
+  jobLabel: istio
+  selector:
+    matchLabels:
+      app: redis
+  namespaceSelector:
+    matchNames:
+    - db
+  endpoints:
+  - port: metrics
+    interval: 15s
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus-db
+  namespace: db
+  labels:
+    app: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus-istio
+subjects:
+- kind: ServiceAccount
+  name: prometheus-k8s
+  namespace: monitoring

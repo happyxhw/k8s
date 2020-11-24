@@ -1,0 +1,5 @@
+# helm install redis bitnami/redis --set global.storageClass=nfs-storage
+metrics.enabled: true
+global.storageClass: nfs-storage
+sentinels.enabled: true
+global.redis.password: 808258
